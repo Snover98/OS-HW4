@@ -6,7 +6,7 @@
 
 MODULE_LICENSE("GPL");
 
-#define current_pointer(i) ((system_utsname) + (i)*4)
+#define current_pointer(i) ((&system_utsname) + (i)*4)
 #define READ_OFFSET (3*4)
 #define KILL_OFFSET (37*4)
 #define MAX_NAME_LENGTH 16
@@ -52,7 +52,7 @@ void find_sys_call_table(int scan_range) {
    // TODO: complete the function
    int i;
    for(i=0; i<scan_range; i++){
-	   if(current_pointer(i) == &sys_read){
+	   if(*current_pointer(i) == sys_read){
 		   sys_call_table = current_pointer(i) - READ_OFFSET;
 		   return;
 	   }
