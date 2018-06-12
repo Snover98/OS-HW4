@@ -41,10 +41,13 @@ void restore_params_to_default(){
 asmlinkage long (*orig_sys_kill)(pid_t,int);
 
 asmlinkage long my_sys_kill(pid_t pid, int sig){
+	//find the task
 	task_t *p = find_task_by_pid(pid);
+	//if the command is to kill the program named program_name, return an error
 	if(sig == SIGKILL && is_prog_name(p->comm)){
 		return -EPERM;
 	}
+	//otherwise, use the original syscall
 	return orig_sys_kill(pid, sig);
 }
 
