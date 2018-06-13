@@ -14,10 +14,10 @@ MODULE_LICENSE("GPL");
 
 // TODO: add command-line arguments
 void** sys_call_table = NULL;
-int input_scan_range = DEFAULT_SCAN_RANGE;
+int scan_range = DEFAULT_SCAN_RANGE;
 char* program_name = NULL;
 
-MODULE_PARM(input_scan_range, "i");
+MODULE_PARM(scan_range, "i");
 MODULE_PARM(program_name, "s");
 
 int is_prog_name(char* name){
@@ -36,7 +36,7 @@ int is_prog_name(char* name){
 void restore_params_to_default(){
 	sys_call_table = NULL;
 	program_name = NULL;
-	input_scan_range = DEFAULT_SCAN_RANGE;
+	scan_range = DEFAULT_SCAN_RANGE;
 }
 
 // TODO: import original syscall and write new syscall
@@ -67,13 +67,13 @@ void find_sys_call_table(int scan_range) {
 int init_module(void) {
    // TODO: complete the function
    //if the program name was not inputted or the input range is invalid
-   if(program_name == NULL || input_scan_range <= 0){
+   if(program_name == NULL || scan_range <= 0){
 	   restore_params_to_default();
 	   return 0;
    }
    
    //try and find the sys_call_table
-   find_sys_call_table(input_scan_range);
+   find_sys_call_table(scan_range);
    //if we did not find it, reset the parameters and return
    if(sys_call_table == NULL){
 	   restore_params_to_default();
