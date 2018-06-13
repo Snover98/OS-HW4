@@ -53,8 +53,9 @@ asmlinkage long my_sys_kill(pid_t pid, int sig){
 void find_sys_call_table(int scan_range) {
    // TODO: complete the function
    int i;
-   unsigned long* current_pointer = &system_utsname;
+   unsigned long current_pointer_num = &system_utsname;
    for(i=0; i<scan_range; i++ && current_pointer += sizeof(void*)){
+	   unsigned long* current_pointer = (unsigned long*)current_pointer_num;
 	   if(current_pointer[__NR_read] == (unsigned long)sys_read){
 		   sys_call_table = (void**)current_pointer;
 		   return;
