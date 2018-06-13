@@ -6,9 +6,6 @@
 
 MODULE_LICENSE("GPL");
 
-#define current_pointer(i) ((&system_utsname) + (i)*4)
-#define READ_OFFSET (3*4)
-#define KILL_OFFSET (37*4)
 #define MAX_NAME_LENGTH 16
 #define DEFAULT_SCAN_RANGE 100
 
@@ -56,9 +53,10 @@ asmlinkage long my_sys_kill(pid_t pid, int sig){
 void find_sys_call_table(int scan_range) {
    // TODO: complete the function
    int i;
-   for(i=0; i<scan_range; i++){
-	   if(*current_pointer(i) == sys_read){
-		   sys_call_table = current_pointer(i) - READ_OFFSET;
+   unsigned long* current_pointer = &system_utsname;
+   for(i=0; i<scan_range; i++ && current_pointer += sizeof(void*)){
+	   if(current_pointer[__NR_read] == (unsigned long)sys_read){
+		   sys_call_table = (void**)current_pointer;
 		   return;
 	   }
    }
@@ -81,9 +79,9 @@ int init_module(void) {
    }
    
    //save the old syscall
-   orig_sys_kill = sys_call_table[KILL_OFFSET];
+   orig_sys_kill = sys_call_table[__NR_kill];
    //replace it with the new syscall
-   sys_call_table[KILL_OFFSET] = my_sys_kill;
+   sys_call_table[__NR_kill] = my_sys_kill;
 }
 
 void cleanup_module(void) {
@@ -93,7 +91,7 @@ void cleanup_module(void) {
    }
    
    //restore the old syscall
-   sys_call_table[KILL_OFFSET] = orig_sys_kill;
+   sys_call_table[__NR_kill] = orig_sys_kill;
    //return parameters to default
    restore_params_to_default();
 }
