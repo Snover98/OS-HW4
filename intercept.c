@@ -1,8 +1,8 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
+// TODO: add more #include statements as necessary
 #include <linux/utsname.h>
 #include <linux/sched.h>
-// TODO: add more #include statements as necessary
 
 MODULE_LICENSE("GPL");
 
