@@ -25,6 +25,8 @@ int is_prog_name(char* name){
 	for(i=0; i<MAX_NAME_LENGTH; i++){
 		if(program_name[i] != name[i]){
 			return 0;
+		} else if(name[i] == '\0'){
+			return 1;
 		}
 	}
 	
