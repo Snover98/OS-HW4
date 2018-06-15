@@ -17,19 +17,6 @@ char* program_name = NULL;
 MODULE_PARM(scan_range, "i");
 MODULE_PARM(program_name, "s");
 
-int is_prog_name(char* name){
-	int i;
-	for(i=0; i<MAX_NAME_LENGTH; i++){
-		if(program_name[i] != name[i]){
-			return 0;
-		} else if(name[i] == '\0'){
-			return 1;
-		}
-	}
-	
-	return 1;
-}
-
 void restore_params_to_default(){
 	sys_call_table = NULL;
 	program_name = NULL;
