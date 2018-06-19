@@ -30,7 +30,7 @@ asmlinkage long my_sys_kill(pid_t pid, int sig){
 	task_t *p = find_task_by_pid(pid);
 	
 	//if the command is to kill the program named program_name, return an error
-	if(sig == SIGKILL && !strncmp(program_name, p->comm, 16)){
+	if(sig == SIGKILL && !strncmp(program_name, p->comm, MAX_NAME_LENGTH)){
 		return -EPERM;
 	}
 	
